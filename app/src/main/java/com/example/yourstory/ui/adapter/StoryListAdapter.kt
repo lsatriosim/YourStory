@@ -14,7 +14,7 @@ class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(
     companion object{
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Story>(){
             override fun areItemsTheSame(oldItem: Story, newItem: Story): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem == newItem
             }
 
             override fun areContentsTheSame(oldItem: Story, newItem: Story): Boolean {
@@ -34,6 +34,7 @@ class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
        val data = getItem(position)
+        Log.d("AdapterList", data?.name ?: "gaada datanya")
         if (data != null){
             holder.bind(data)
         }

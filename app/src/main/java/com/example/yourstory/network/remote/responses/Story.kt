@@ -6,9 +6,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-
 @Entity(tableName = "story")
-@Parcelize
 data class Story(
 
 	@field:SerializedName("photoUrl")
@@ -32,4 +30,4 @@ data class Story(
 
 	@field:SerializedName("lon")
 	val lon: Double? = null
-): Parcelable
+)

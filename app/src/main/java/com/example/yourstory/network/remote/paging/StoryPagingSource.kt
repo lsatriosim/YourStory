@@ -1,5 +1,6 @@
 package com.example.yourstory.network.remote.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.yourstory.network.remote.responses.Story
@@ -17,6 +18,7 @@ class StoryPagingSource(private val apiService: ApiService) : PagingSource<Int, 
         return try {
             val position = params.key ?: INITIAL_PAGE_INDEX
             val responseData = apiService.getStoriesWithPaging(position, params.loadSize)
+            Log.d("Test API", "Hasil load ")
             LoadResult.Page(
                 data = responseData,
                 prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,

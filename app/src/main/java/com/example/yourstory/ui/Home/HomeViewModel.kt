@@ -33,32 +33,4 @@ class HomeViewModel(private var pref: UserPreferences,private var dataStore: Dat
     companion object{
         private const val TAG = "HomeViewModel"
     }
-
-    init{
-        getStory()
-    }
-
-    private fun getStory(){
-        _isLoading.value = true
-        val client = ApiConfig.getApiService(dataStore).getStories()
-        client.enqueue(object : Callback<StoriesResponse> {
-            override fun onResponse(
-                call: Call<StoriesResponse>,
-                response: Response<StoriesResponse>
-            ) {
-                _isLoading.value = false
-                if(response.isSuccessful){
-                    _story.value = response.body()?.listStory
-                }else{
-                    Log.e(TAG, "onFailure (s): ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<StoriesResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure (f): ${t.message.toString()}")
-            }
-
-        })
-    }
 }
