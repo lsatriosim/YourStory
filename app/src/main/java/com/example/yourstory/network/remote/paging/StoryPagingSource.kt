@@ -18,7 +18,7 @@ class StoryPagingSource(private val apiService: ApiService) : PagingSource<Int, 
         return try {
             val position = params.key ?: INITIAL_PAGE_INDEX
             val responseData = apiService.getStoriesWithPaging(position, params.loadSize)
-            Log.d("Test API", "Hasil load ")
+            Log.d("Test API", "Hasil load : $responseData")
             LoadResult.Page(
                 data = responseData,
                 prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,
