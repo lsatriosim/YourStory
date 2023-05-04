@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">YourStory</string>
+    <string name="title_activity_home">Home Activity</string>
+    <string name="story_title">User\'s Name</string>
+    <string name="login_name">Username</string>
+    <string name="salutation">Hello,</string>
+    <string name="story_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac odio a massa placerat tristique quis id felis. In gravida neque ultricies tortor consectetur semper. Cras a ante risus. Pellentesque porttitor nisl vitae ipsum accumsan, ut ultrices lectus volutpat. Phasellus a pretium eros. Fusce vel mattis diam. Fusce mauris tellus, ultrices porta facilisis et, consequat ut sapien. Mauris ligula mi, gravida et odio ut, vehicula iaculis odio. Sed quam mi, hendrerit id tincidunt quis, facilisis nec massa. Fusce in consequat nisi. Phasellus dapibus turpis vitae velit efficitur, sit amet ornare metus laoreet. Nullam rhoncus justo libero, eget vulputate sapien venenatis vitae. Morbi vitae venenatis ex. Vestibulum neque quam, lacinia a porttitor in, pellentesque accumsan ligula. Phasellus porta non tortor vel vulputate. Proin accumsan non turpis quis euismod.</string>
+    <string name="min_pass">Password minimum 8 characters</string>
+    <string name="email_valid">Email must be valid</string>
+    <string name="btn_register">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="register_to_login">Click here if you already have an account. Login</string>
+    <string name="login_to_register">Click here if you don\'t have an account. Sign up</string>
+    <string name="camera">Take photo</string>
+    <string name="library">Choose photo</string>
+    <string name="description">Input the photo\'s description</string>
+    <string name="upload">Upload</string>
+    <string name="loading">Please Wait...</string>
+    <string name="input_email">Input Your Email</string>
+    <string name="input_name">Input Your Name</string>
+    <string name="input_password">Input Your Password</string>
+    <string name="confirm_logout_message">Are you sure want to logout?</string>
+    <string name="confirm_logout_title">Confirm Logout</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="title_activity_maps">MapsActivity</string>
+</resources>

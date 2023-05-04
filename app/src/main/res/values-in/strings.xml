@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">YourStory</string>
+    <string name="title_activity_home">Home Activity</string>
+    <string name="story_title">Nama User</string>
+    <string name="login_name">Username</string>
+    <string name="salutation">Hai,</string>
+    <string name="story_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac odio a massa placerat tristique quis id felis. In gravida neque ultricies tortor consectetur semper. Cras a ante risus. Pellentesque porttitor nisl vitae ipsum accumsan, ut ultrices lectus volutpat. Phasellus a pretium eros. Fusce vel mattis diam. Fusce mauris tellus, ultrices porta facilisis et, consequat ut sapien. Mauris ligula mi, gravida et odio ut, vehicula iaculis odio. Sed quam mi, hendrerit id tincidunt quis, facilisis nec massa. Fusce in consequat nisi. Phasellus dapibus turpis vitae velit efficitur, sit amet ornare metus laoreet. Nullam rhoncus justo libero, eget vulputate sapien venenatis vitae. Morbi vitae venenatis ex. Vestibulum neque quam, lacinia a porttitor in, pellentesque accumsan ligula. Phasellus porta non tortor vel vulputate. Proin accumsan non turpis quis euismod.</string>
+    <string name="min_pass">Password minimal 8 karakter</string>
+    <string name="email_valid">Email harus valid</string>
+    <string name="btn_register">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="register_to_login">Klik disini jika anda sudah memiliki akun. Masuk</string>
+    <string name="login_to_register">klik disini jika anda belum memiliki akun. Daftar</string>
+    <string name="camera">Ambil Gambar</string>
+    <string name="library">Pilih Gambar</string>
+    <string name="description">Masukkan deskripsi gambar</string>
+    <string name="upload">Unggah</string>
+    <string name="loading">Harap Tunggu...</string>
+    <string name="input_email">Masukkan email anda</string>
+    <string name="input_name">Masukkan nama anda</string>
+    <string name="input_password">Masukkan password anda</string>
+    <string name="confirm_logout_message">Apakah anda yakin ingin keluar?</string>
+    <string name="confirm_logout_title">Konfirmasi Keluar</string>
+    <string name="yes">Iya</string>
+    <string name="no">Tidak</string>
+</resources>
