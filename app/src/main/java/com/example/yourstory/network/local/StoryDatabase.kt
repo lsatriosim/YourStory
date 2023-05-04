@@ -7,11 +7,13 @@ import androidx.room.RoomDatabase
 import com.example.yourstory.network.remote.responses.Story
 
 @Database(
-    entities = [Story::class],
-    version = 1,
+    entities = [Story::class, RemoteKeys::class],
+    version = 2,
     exportSchema = false
 )
 abstract class StoryDatabase : RoomDatabase() {
+    abstract fun storyDao() : StoryDao
+    abstract fun remoteKeysDao() : RemoteKeysDao
     companion object{
         @Volatile
         private var INSTANCE: StoryDatabase? = null
