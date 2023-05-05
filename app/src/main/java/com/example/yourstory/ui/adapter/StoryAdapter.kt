@@ -19,7 +19,7 @@ class StoryAdapter(private val listStory: List<Story>): RecyclerView.Adapter<Sto
     }
 
     interface OnItemClickCallback{
-        fun onItemClicked(data: List<String>, itemView: View)
+        fun onItemClicked(data: List<String>)
     }
 
 
@@ -39,7 +39,7 @@ class StoryAdapter(private val listStory: List<Story>): RecyclerView.Adapter<Sto
             .load(story[0])
             .into(holder.imgStory)
         holder.tvName.text = story[1]
-        holder.itemView.setOnClickListener{onItemClickCallback?.onItemClicked(story,holder.itemView)}
+        holder.itemView.setOnClickListener{onItemClickCallback?.onItemClicked(story)}
     }
 
 }

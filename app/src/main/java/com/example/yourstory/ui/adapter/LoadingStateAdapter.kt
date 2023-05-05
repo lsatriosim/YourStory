@@ -30,6 +30,4 @@ class LoadingStateAdapter(private val retry: () -> Unit) : LoadStateAdapter<Load
             binding.errorMsg.isVisible = loadState is LoadState.Error
         }
     }
-
-    
 }

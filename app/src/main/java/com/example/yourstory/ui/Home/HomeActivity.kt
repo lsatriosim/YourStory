@@ -108,7 +108,7 @@ class HomeActivity : AppCompatActivity() {
         finishAffinity()
     }
 
-    private fun onItemClick(photoView: ImageView, nameView: TextView, data: List<String>) {
+    private fun onItemClick(photoView: ImageView, nameView: TextView, data: Story?) {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
             this@HomeActivity,
             Pair.create(photoView, "photo"),
@@ -116,9 +116,9 @@ class HomeActivity : AppCompatActivity() {
         )
 
         Intent(this@HomeActivity, DetailStoryActivity::class.java).also{
-            it.putExtra(DetailStoryActivity.EXTRA_PHOTO, data[0])
-            it.putExtra(DetailStoryActivity.EXTRA_NAME, data[1])
-            it.putExtra(DetailStoryActivity.EXTRA_DESCRIPTION, data[2])
+            it.putExtra(DetailStoryActivity.EXTRA_PHOTO, data?.photoUrl)
+            it.putExtra(DetailStoryActivity.EXTRA_NAME, data?.name)
+            it.putExtra(DetailStoryActivity.EXTRA_DESCRIPTION, data?.description)
             startActivity(it, options.toBundle())
         }
     }
@@ -133,6 +133,14 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getData(){
         val adapter = StoryListAdapter()
+        adapter.setOnItemClickCallback(object:StoryListAdapter.OnItemClickCallback{
+            override fun onItemClicked(data: Story?, itemView: View) {
+                val photoView = itemView.findViewById<ImageView>(R.id.iv_item_photo)
+                val nameView = itemView.findViewById<TextView>(R.id.tv_item_name)
+
+                onItemClick(photoView,nameView,data)
+            }
+        })
         binding.rvStory.adapter = adapter.withLoadStateFooter(
             footer = LoadingStateAdapter{
                 adapter.retry()

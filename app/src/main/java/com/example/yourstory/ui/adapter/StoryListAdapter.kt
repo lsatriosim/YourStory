@@ -2,7 +2,10 @@ package com.example.yourstory.ui.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +14,16 @@ import com.example.yourstory.databinding.ItemStoryBinding
 import com.example.yourstory.network.remote.responses.Story
 
 class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(DIFF_CALLBACK) {
+    private var onItemClickCallback: StoryListAdapter.OnItemClickCallback? = null
+
+    interface OnItemClickCallback{
+        fun onItemClicked(data: Story?, itemView: View)
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: StoryListAdapter.OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     companion object{
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Story>(){
             override fun areItemsTheSame(oldItem: Story, newItem: Story): Boolean {
@@ -38,6 +51,7 @@ class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(
         if (data != null){
             holder.bind(data)
         }
+        holder.itemView.setOnClickListener{onItemClickCallback?.onItemClicked(data,holder.itemView)}
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
