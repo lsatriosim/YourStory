@@ -24,4 +24,6 @@
     <string name="confirm_logout_title">Konfirmasi Keluar</string>
     <string name="yes">Iya</string>
     <string name="no">Tidak</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="retry">Coba Lagi</string>
 </resources>

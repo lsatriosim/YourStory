@@ -32,6 +32,7 @@ import kotlinx.coroutines.runBlocking
 import androidx.core.util.Pair
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
+import com.example.yourstory.ui.adapter.LoadingStateAdapter
 import com.example.yourstory.ui.adapter.StoryListAdapter
 import com.example.yourstory.ui.login.LoginActivity
 import com.example.yourstory.ui.maps.MapsActivity
@@ -132,12 +133,14 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getData(){
         val adapter = StoryListAdapter()
-        binding.rvStory.adapter = adapter
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter{
+                adapter.retry()
+            }
+        )
         homeViewModel.storyPaging.observe(this){pagingData->
-            Log.d("AdapterList", "Received new paging data: $pagingData")
             adapter.submitData(lifecycle,pagingData)
         }
-        Log.d("AdapterList", "Started observing storyPaging")
     }
 
 }
