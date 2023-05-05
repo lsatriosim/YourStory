@@ -21,7 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel(private var pref: UserPreferences,private var dataStore: DataStore<Preferences>, storyRepository: StoryRepository) : ViewModel() {
+class HomeViewModel(storyRepository: StoryRepository) : ViewModel() {
     private val _story = MutableLiveData<List<Story>>()
     val story: LiveData<List<Story>> = _story
 

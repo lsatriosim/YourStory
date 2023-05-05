@@ -13,10 +13,10 @@ import com.bumptech.glide.Glide
 import com.example.yourstory.databinding.ItemStoryBinding
 import com.example.yourstory.network.remote.responses.Story
 
-class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class StoryListAdapter : PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(DIFF_CALLBACK) {
     private var onItemClickCallback: StoryListAdapter.OnItemClickCallback? = null
 
-    interface OnItemClickCallback{
+    interface OnItemClickCallback {
         fun onItemClicked(data: Story?, itemView: View)
     }
 
@@ -24,8 +24,8 @@ class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(
         this.onItemClickCallback = onItemClickCallback
     }
 
-    companion object{
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Story>(){
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Story>() {
             override fun areItemsTheSame(oldItem: Story, newItem: Story): Boolean {
                 return oldItem == newItem
             }
@@ -36,8 +36,9 @@ class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(
         }
     }
 
-    class MyViewHolder(private val binding: ItemStoryBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Story){
+    class MyViewHolder(private val binding: ItemStoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: Story) {
             binding.tvItemName.text = data.name
             Glide.with(itemView.context)
                 .load(data.photoUrl)
@@ -46,12 +47,17 @@ class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.MyViewHolder>(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-       val data = getItem(position)
+        val data = getItem(position)
         Log.d("AdapterList", data?.name ?: "gaada datanya")
-        if (data != null){
+        if (data != null) {
             holder.bind(data)
         }
-        holder.itemView.setOnClickListener{onItemClickCallback?.onItemClicked(data,holder.itemView)}
+        holder.itemView.setOnClickListener {
+            onItemClickCallback?.onItemClicked(
+                data,
+                holder.itemView
+            )
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
