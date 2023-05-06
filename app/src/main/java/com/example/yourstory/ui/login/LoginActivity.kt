@@ -28,7 +28,7 @@ import com.example.yourstory.ui.register.RegisterActivity
 class LoginActivity : AppCompatActivity() {
     private lateinit var dataStore: DataStore<Preferences>
     private var mIsShowPass = false
-    private lateinit var binding:ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var loginViewModel: LoginViewModel
     private var email = ""
     private var password = ""
@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
         binding.edLoginEmail.hint = getString(R.string.input_email)
         binding.edLoginPassword.hint = getString(R.string.input_password)
         val text = getString(R.string.login_to_register)
-        val clickableSpan = object: ClickableSpan(){
+        val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                 startActivity(intent)
@@ -53,12 +53,22 @@ class LoginActivity : AppCompatActivity() {
         val spannableString = SpannableString(text)
         val indexStart = 41
         val indexEnd = 48
-        spannableString.setSpan(clickableSpan, indexStart, indexEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(ForegroundColorSpan(Color.BLUE), indexStart, indexEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            clickableSpan,
+            indexStart,
+            indexEnd,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(
+            ForegroundColorSpan(Color.BLUE),
+            indexStart,
+            indexEnd,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         binding.tvLoginToRegister.text = spannableString
         binding.tvLoginToRegister.movementMethod = LinkMovementMethod.getInstance()
 
-        binding.showPassword.setOnClickListener{
+        binding.showPassword.setOnClickListener {
             mIsShowPass = !mIsShowPass
             showPassword(mIsShowPass)
         }
@@ -68,18 +78,18 @@ class LoginActivity : AppCompatActivity() {
         setViewModel()
         setupAction()
 
-        loginViewModel.loginResponse.observe(this){
-            if(!it.error){
+        loginViewModel.loginResponse.observe(this) {
+            if (!it.error) {
                 var result = it.loginResult
-                loginViewModel.saveUser(UserLogin(result.name,result.userId,result.token))
+                loginViewModel.saveUser(UserLogin(result.name, result.userId, result.token))
                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                 startActivity(intent)
-            }else{
+            } else {
                 Toast.makeText(this@LoginActivity, it.message, Toast.LENGTH_SHORT).show()
             }
         }
 
-        loginViewModel.isLoading.observe(this){
+        loginViewModel.isLoading.observe(this) {
             loadingButton(it)
         }
     }
@@ -91,20 +101,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.btnLogin.setOnClickListener{
+        binding.btnLogin.setOnClickListener {
             email = binding.edLoginEmail.text.toString()
-            password  = binding.edLoginPassword.text.toString()
+            password = binding.edLoginPassword.text.toString()
 
-            when{
+            when {
                 email.isEmpty() -> {
                     binding.edLoginEmail.error = "Input email"
                 }
-                password.isEmpty()-> {
+                password.isEmpty() -> {
                     binding.edLoginPassword.error = "Input password"
                 }
                 else -> {
-                    if(!binding.edLoginPassword.isError && !binding.edLoginEmail.isError){
-                        loginViewModel.login(email,password)
+                    if (!binding.edLoginPassword.isError && !binding.edLoginEmail.isError) {
+                        loginViewModel.login(email, password)
                     }
                 }
             }
@@ -112,29 +122,34 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setViewModel() {
-        loginViewModel = ViewModelProvider(this, ViewModelFactory(UserPreferences.getInstance(dataStore),dataStore,this))[LoginViewModel::class.java]
+        loginViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(UserPreferences.getInstance(dataStore), dataStore, this)
+        )[LoginViewModel::class.java]
 
-        loginViewModel.getUser().observe(this){user ->
+        loginViewModel.getUser().observe(this) { user ->
             this.user = user
         }
     }
 
-    private fun showPassword(isShow: Boolean){
-        if(isShow){
-            binding.edLoginPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+    private fun showPassword(isShow: Boolean) {
+        if (isShow) {
+            binding.edLoginPassword.transformationMethod =
+                HideReturnsTransformationMethod.getInstance()
             binding.showPassword.setImageResource(R.drawable.ic_hide_password)
-        }else{
-            binding.edLoginPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+        } else {
+            binding.edLoginPassword.transformationMethod =
+                PasswordTransformationMethod.getInstance()
             binding.showPassword.setImageResource(R.drawable.ic_reveal_password)
         }
         binding.edLoginPassword.setSelection(binding.edLoginPassword.text.toString().length)
     }
 
-    private fun loadingButton(isLoading: Boolean){
+    private fun loadingButton(isLoading: Boolean) {
         binding.btnLogin.isEnabled = !isLoading
-        if(isLoading){
+        if (isLoading) {
             binding.btnLogin.text = getString(R.string.loading)
-        }else{
+        } else {
             binding.btnLogin.text = getString(R.string.login)
         }
     }

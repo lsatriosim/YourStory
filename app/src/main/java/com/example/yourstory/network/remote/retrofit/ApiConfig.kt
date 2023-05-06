@@ -8,8 +8,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApiConfig(private val dataStore: DataStore<Preferences>){
-    companion object{
+class ApiConfig(private val dataStore: DataStore<Preferences>) {
+    companion object {
         fun getApiService(dataStore: DataStore<Preferences>): ApiService {
             val loggingInterceptor =
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)

@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.edRegisterName.hint = getString(R.string.input_name)
 
         val text = getString(R.string.register_to_login)
-        val clickableSpan = object: ClickableSpan(){
+        val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                 startActivity(intent)
@@ -60,12 +60,22 @@ class RegisterActivity : AppCompatActivity() {
         val spannableString = SpannableString(text)
         val indexStart = 43
         val indexEnd = 48
-        spannableString.setSpan(clickableSpan, indexStart, indexEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(ForegroundColorSpan(Color.BLUE), indexStart, indexEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            clickableSpan,
+            indexStart,
+            indexEnd,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(
+            ForegroundColorSpan(Color.BLUE),
+            indexStart,
+            indexEnd,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         binding.tvRegisterToLogin.text = spannableString
         binding.tvRegisterToLogin.movementMethod = LinkMovementMethod.getInstance()
 
-        binding.showPassword.setOnClickListener{
+        binding.showPassword.setOnClickListener {
             mIsShowPass = !mIsShowPass
             showPassword(mIsShowPass)
         }
@@ -75,21 +85,27 @@ class RegisterActivity : AppCompatActivity() {
         setViewModel()
         setupAction()
 
-        registerViewModel.registerResponse.observe(this){
-            if(!it.error){
-                registerViewModel.login(email,password)
-            }else{
+        registerViewModel.registerResponse.observe(this) {
+            if (!it.error) {
+                registerViewModel.login(email, password)
+            } else {
                 Toast.makeText(this@RegisterActivity, it.message, Toast.LENGTH_SHORT).show()
             }
         }
 
-        registerViewModel.loginResponse.observe(this){
-            registerViewModel.saveUser(UserLogin(it.loginResult.name, it.loginResult.userId,it.loginResult.token))
+        registerViewModel.loginResponse.observe(this) {
+            registerViewModel.saveUser(
+                UserLogin(
+                    it.loginResult.name,
+                    it.loginResult.userId,
+                    it.loginResult.token
+                )
+            )
             val intent = Intent(this@RegisterActivity, HomeActivity::class.java)
             startActivity(intent)
         }
 
-        registerViewModel.isLoading.observe(this){
+        registerViewModel.isLoading.observe(this) {
             loadingButton(it)
         }
     }
@@ -100,51 +116,56 @@ class RegisterActivity : AppCompatActivity() {
         finishAffinity()
     }
 
-    private fun showPassword(isShow: Boolean){
-        if(isShow){
-            binding.edRegisterPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+    private fun showPassword(isShow: Boolean) {
+        if (isShow) {
+            binding.edRegisterPassword.transformationMethod =
+                HideReturnsTransformationMethod.getInstance()
             binding.showPassword.setImageResource(R.drawable.ic_hide_password)
-        }else{
-            binding.edRegisterPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+        } else {
+            binding.edRegisterPassword.transformationMethod =
+                PasswordTransformationMethod.getInstance()
             binding.showPassword.setImageResource(R.drawable.ic_reveal_password)
         }
         binding.edRegisterPassword.setSelection(binding.edRegisterPassword.text.toString().length)
     }
 
-    private fun setViewModel(){
-        registerViewModel = ViewModelProvider(this, ViewModelFactory(UserPreferences.getInstance(dataStore),dataStore,this))[RegisterViewModel::class.java]
+    private fun setViewModel() {
+        registerViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(UserPreferences.getInstance(dataStore), dataStore, this)
+        )[RegisterViewModel::class.java]
     }
 
-    private fun setupAction(){
-        binding.btnRegister.setOnClickListener{
+    private fun setupAction() {
+        binding.btnRegister.setOnClickListener {
             name = binding.edRegisterName.text.toString()
             email = binding.edRegisterEmail.text.toString()
-            password  = binding.edRegisterPassword.text.toString()
+            password = binding.edRegisterPassword.text.toString()
 
-            when{
-                name.isEmpty() ->{
+            when {
+                name.isEmpty() -> {
                     binding.edRegisterName.error = "Input name"
                 }
                 email.isEmpty() -> {
                     binding.edRegisterEmail.error = "Input email"
                 }
-                password.isEmpty()-> {
+                password.isEmpty() -> {
                     binding.edRegisterPassword.error = "Input password"
                 }
                 else -> {
-                    if(!binding.edRegisterPassword.isError && !binding.edRegisterEmail.isError){
-                        registerViewModel.register(name,email, password)
+                    if (!binding.edRegisterPassword.isError && !binding.edRegisterEmail.isError) {
+                        registerViewModel.register(name, email, password)
                     }
                 }
             }
         }
     }
 
-    private fun loadingButton(isLoading: Boolean){
+    private fun loadingButton(isLoading: Boolean) {
         binding.btnRegister.isEnabled = !isLoading
-        if(isLoading){
+        if (isLoading) {
             binding.btnRegister.text = getString(R.string.loading)
-        }else{
+        } else {
             binding.btnRegister.text = getString(R.string.btn_register)
         }
     }

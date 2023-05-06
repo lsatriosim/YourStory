@@ -6,10 +6,12 @@ import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -25,6 +27,10 @@ import com.example.yourstory.rotateFile
 import com.example.yourstory.ui.Home.HomeActivity
 import com.example.yourstory.ui.camera.CameraActivity
 import com.example.yourstory.uriToFile
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -37,17 +43,22 @@ import java.io.File
 import java.io.FileOutputStream
 
 class UploadActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityUploadBinding
+    private lateinit var binding: ActivityUploadBinding
     private val MAXIMAL_SIZE = 1000000
     private lateinit var dataStore: DataStore<Preferences>
     private var isLoading: Boolean = false
 
     private var getFile: File? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var includeLocation: Boolean = false
+    private var userLastPosition: Location? = null
 
-    companion object{
+    companion object {
         const val CAMERA_X_RESULT = 200
         const val REQUEST_CODE_GALLERY = 100
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        const val REQUEST_CODE_LOCATION_PERMISSIONS = 11
+        private val REQUIRED_PERMISSIONS =
+            arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }
 
@@ -65,9 +76,16 @@ class UploadActivity : AppCompatActivity() {
             )
         }
 
-        binding.camerax.setOnClickListener{startCameraX()}
-        binding.library.setOnClickListener{startGallery()}
-        binding.buttonAdd.setOnClickListener{uploadImage()}
+        binding.camerax.setOnClickListener { startCameraX() }
+        binding.library.setOnClickListener { startGallery() }
+        binding.buttonAdd.setOnClickListener { uploadImage() }
+
+        binding.switchLocation.setOnCheckedChangeListener { _, isChecked ->
+            includeLocation = isChecked
+            getMyLocation()
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -111,7 +129,8 @@ class UploadActivity : AppCompatActivity() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
 
-            val description = binding.edAddDescription.text.toString().toRequestBody("text/plain".toMediaType())
+            val description =
+                binding.edAddDescription.text.toString().toRequestBody("text/plain".toMediaType())
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                 "photo",
@@ -119,8 +138,19 @@ class UploadActivity : AppCompatActivity() {
                 requestImageFile
             )
 
+            var uploadImageRequest: Call<RegisterResponse>
+
             val apiService = ApiConfig.getApiService(dataStore)
-            val uploadImageRequest = apiService.addStory(imageMultipart, description)
+            var longitude = userLastPosition?.longitude.toString()?:"null"
+            var latitude = userLastPosition?.latitude.toString()?:"null"
+            Log.d("Check Position", "longitude ${longitude}")
+            Log.d("Check Position", "latitude ${latitude}")
+
+            if(includeLocation){
+                uploadImageRequest = apiService.addStory(imageMultipart, description, longitude.toRequestBody(), latitude.toRequestBody())
+            }else{
+                uploadImageRequest = apiService.addStory(imageMultipart, description, null, null)
+            }
 
             uploadImageRequest.enqueue(object : Callback<RegisterResponse> {
                 override fun onResponse(
@@ -132,14 +162,20 @@ class UploadActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         if (responseBody != null && !responseBody.error) {
-                            Toast.makeText(this@UploadActivity, responseBody.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@UploadActivity,
+                                responseBody.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
                             val intent = Intent(this@UploadActivity, HomeActivity::class.java)
                             startActivity(intent)
                         }
                     } else {
-                        Toast.makeText(this@UploadActivity, response.message(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@UploadActivity, response.message(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
+
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                     isLoading = false
                     showLoading(isLoading)
@@ -147,7 +183,13 @@ class UploadActivity : AppCompatActivity() {
                 }
             })
         } else {
-            Toast.makeText(this@UploadActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+            isLoading = false
+            showLoading(isLoading)
+            Toast.makeText(
+                this@UploadActivity,
+                "Silakan masukkan berkas gambar terlebih dahulu.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -211,12 +253,38 @@ class UploadActivity : AppCompatActivity() {
         return file
     }
 
-    fun showLoading(isLoading:Boolean){
+    fun showLoading(isLoading: Boolean) {
         binding.buttonAdd.isEnabled = !isLoading
-        if(isLoading){
+        if (isLoading) {
             binding.buttonAdd.text = getString(R.string.loading)
-        }else{
+        } else {
             binding.buttonAdd.text = getString(R.string.upload)
         }
     }
+
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    userLastPosition = location
+                    Log.d("check position", "position: ${userLastPosition.toString()}")
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                getMyLocation()
+            }
+        }
 }

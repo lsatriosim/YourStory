@@ -11,9 +11,9 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
     fun getUser(): Flow<UserLogin> {
         return dataStore.data.map { preferences ->
             UserLogin(
-                preferences[NAME_KEY] ?:"",
-                preferences[ID_KEY] ?:"",
-                preferences[TOKEN_KEY] ?:"",
+                preferences[NAME_KEY] ?: "",
+                preferences[ID_KEY] ?: "",
+                preferences[TOKEN_KEY] ?: "",
             )
         }
     }

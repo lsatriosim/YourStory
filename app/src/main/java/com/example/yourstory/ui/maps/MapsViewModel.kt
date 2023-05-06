@@ -13,23 +13,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MapsViewModel(private var dataStore: DataStore<Preferences>): ViewModel() {
+class MapsViewModel(private var dataStore: DataStore<Preferences>) : ViewModel() {
     private val _story = MutableLiveData<List<Story>>()
     val story: LiveData<List<Story>> = _story
-    
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    companion object{
+    companion object {
         private const val TAG = "MapViewModel"
     }
 
 
-    init{
+    init {
         getStory()
     }
 
-    private fun getStory(){
+    private fun getStory() {
         _isLoading.value = true
         val client = ApiConfig.getApiService(dataStore).getStoriesWithLocation(1)
         client.enqueue(object : Callback<StoriesResponse> {
@@ -38,9 +38,9 @@ class MapsViewModel(private var dataStore: DataStore<Preferences>): ViewModel() 
                 response: Response<StoriesResponse>
             ) {
                 _isLoading.value = false
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _story.value = response.body()?.listStory
-                }else{
+                } else {
                     Log.e(MapsViewModel.TAG, "onFailure (s): ${response.message()}")
                 }
             }

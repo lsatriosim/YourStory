@@ -24,13 +24,13 @@ class SplashActivity : AppCompatActivity() {
         dataStore = SingletonDatastore.getInstance(this)
 
         val userSession = UserPreferences(dataStore)
-        val token = runBlocking{
+        val token = runBlocking {
             dataStore.data.first()[stringPreferencesKey("token")]
         }
         Log.d("UserSession", userSession.toString())
-        val intent = if(token != null){
+        val intent = if (token != null) {
             Intent(this@SplashActivity, HomeActivity::class.java)
-        }else{
+        } else {
             Intent(this@SplashActivity, LoginActivity::class.java)
         }
 

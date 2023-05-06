@@ -8,43 +8,42 @@ import retrofit2.http.*
 
 interface ApiService {
     @GET("stories")
-    fun getStories(): Call<StoriesResponse>
-
-    @GET("stories")
     suspend fun getStoriesWithPaging(
-        @Query("page") page:Int,
-        @Query("size") size:Int
-    ):  StoriesResponse
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): StoriesResponse
 
     @GET("stories")
     fun getStoriesWithLocation(
-        @Query("location") location:Int
+        @Query("location") location: Int
     ): Call<StoriesResponse>
 
     @GET("/stories/{id}")
     fun getStory(
-        @Path("id") id:String
+        @Path("id") id: String
     ): Call<StoryResponse>
 
     @FormUrlEncoded
     @POST("register")
     fun register(
-        @Field("name") name:String,
-        @Field("email") email:String,
-        @Field("password") password:String
+        @Field("name") name: String,
+        @Field("email") email: String,
+        @Field("password") password: String
     ): Call<RegisterResponse>
 
     @FormUrlEncoded
     @POST("login")
     fun login(
-        @Field("email") email:String,
-        @Field("password") password:String
+        @Field("email") email: String,
+        @Field("password") password: String
     ): Call<LoginResponse>
 
     @Multipart
     @POST("stories")
     fun addStory(
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody,
+        @Part("lat") latitude: RequestBody? = null,
+        @Part("lon") longitude: RequestBody? = null
     ): Call<RegisterResponse>
 }

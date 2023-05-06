@@ -1,8 +1,6 @@
 package com.example.yourstory.ui.Home
 
-import UserPreferences
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.datastore.core.DataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.AsyncPagingDataDiffer
@@ -29,7 +27,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class HomeViewModelTest{
+class HomeViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
@@ -86,9 +84,11 @@ class QuotePagingSource : PagingSource<Int, LiveData<List<Story>>>() {
             return PagingData.from(items)
         }
     }
+
     override fun getRefreshKey(state: PagingState<Int, LiveData<List<Story>>>): Int {
         return 0
     }
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LiveData<List<Story>>> {
         return LoadResult.Page(emptyList(), 0, 1)
     }

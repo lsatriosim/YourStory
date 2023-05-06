@@ -2,7 +2,6 @@ package com.example.yourstory.ui.camera
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.yourstory.R
 import android.content.Intent
 import android.os.Build
 import android.view.WindowInsets
@@ -18,15 +17,13 @@ import androidx.core.content.ContextCompat
 import com.example.yourstory.createFile
 import com.example.yourstory.databinding.ActivityCameraBinding
 import com.example.yourstory.ui.upload.UploadActivity
-import java.nio.file.Files.createFile
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,8 +32,9 @@ class CameraActivity : AppCompatActivity() {
 
         binding.captureImage.setOnClickListener { takePhoto() }
         binding.switchCamera.setOnClickListener {
-            cameraSelector = if (cameraSelector.equals(CameraSelector.DEFAULT_BACK_CAMERA)) CameraSelector.DEFAULT_FRONT_CAMERA
-            else CameraSelector.DEFAULT_BACK_CAMERA
+            cameraSelector =
+                if (cameraSelector.equals(CameraSelector.DEFAULT_BACK_CAMERA)) CameraSelector.DEFAULT_FRONT_CAMERA
+                else CameraSelector.DEFAULT_BACK_CAMERA
             startCamera()
         }
     }

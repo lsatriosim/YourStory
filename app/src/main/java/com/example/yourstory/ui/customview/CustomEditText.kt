@@ -8,10 +8,9 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import com.bumptech.glide.Glide.init
 import com.example.yourstory.R
 
-class CustomEditText: AppCompatEditText{
+class CustomEditText : AppCompatEditText {
     var isError = false
 
     constructor(context: Context) : super(context) {
@@ -22,7 +21,11 @@ class CustomEditText: AppCompatEditText{
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 

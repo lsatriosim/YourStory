@@ -2,7 +2,6 @@ package com.example.yourstory.ui.customview
 
 import android.content.Context
 import android.graphics.Canvas
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
@@ -10,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.example.yourstory.R
 
-class CustomEmailEditText: AppCompatEditText {
+class CustomEmailEditText : AppCompatEditText {
     var isError = false
 
     constructor(context: Context) : super(context) {
@@ -21,7 +20,11 @@ class CustomEmailEditText: AppCompatEditText {
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 

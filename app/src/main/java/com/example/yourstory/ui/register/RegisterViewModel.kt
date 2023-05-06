@@ -18,21 +18,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterViewModel(private val pref: UserPreferences,private var dataStore: DataStore<Preferences>): ViewModel() {
-    companion object{
+class RegisterViewModel(
+    private val pref: UserPreferences,
+    private var dataStore: DataStore<Preferences>
+) : ViewModel() {
+    companion object {
         const val TAG = "RegisterViewModel"
     }
 
     private val _registerResponse = MutableLiveData<RegisterResponse>()
-    val registerResponse:LiveData<RegisterResponse> = _registerResponse
+    val registerResponse: LiveData<RegisterResponse> = _registerResponse
 
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading:LiveData<Boolean> = _isLoading
+    val isLoading: LiveData<Boolean> = _isLoading
 
-    fun saveUser(user: UserLogin){
+    fun saveUser(user: UserLogin) {
         viewModelScope.launch {
             pref.saveUser(user)
         }
@@ -42,18 +45,18 @@ class RegisterViewModel(private val pref: UserPreferences,private var dataStore:
         _isLoading.value = false
     }
 
-    fun register(name:String, email:String, password:String){
+    fun register(name: String, email: String, password: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService(dataStore).register(name, email, password)
-        client.enqueue(object: Callback<RegisterResponse>{
+        client.enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
                 call: Call<RegisterResponse>,
                 response: Response<RegisterResponse>
             ) {
                 _isLoading.value = false
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _registerResponse.value = response.body()
-                }else{
+                } else {
                     Log.e(RegisterViewModel.TAG, "onFailure (s): ${response.message()}")
                 }
             }
@@ -66,15 +69,15 @@ class RegisterViewModel(private val pref: UserPreferences,private var dataStore:
         })
     }
 
-    fun login(email:String, password:String){
+    fun login(email: String, password: String) {
         _isLoading.value = true
-        val client = ApiConfig.getApiService(dataStore).login(email,password)
-        client.enqueue(object: Callback<LoginResponse>{
+        val client = ApiConfig.getApiService(dataStore).login(email, password)
+        client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 _isLoading.value = false
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _loginResponse.value = response.body()
-                }else{
+                } else {
                     Log.e(RegisterViewModel.TAG, "onFailure (s): ${response.message()}")
                 }
             }

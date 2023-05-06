@@ -50,7 +50,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(UserPreferences.getInstance(dataStore), dataStore,this)
+            ViewModelFactory(UserPreferences.getInstance(dataStore), dataStore, this)
         )[MapsViewModel::class.java]
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -100,8 +100,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             mMap.isMyLocationEnabled = true
-            fusedLocationClient.lastLocation.addOnSuccessListener { location:Location? ->
-                if (location != null){
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
                     val latLng = LatLng(location.latitude, location.longitude)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
                 }
@@ -134,7 +134,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             addMarkers(it)
         }
 
-        viewModel.isLoading.observe(this){
+        viewModel.isLoading.observe(this) {
             showLoading(it)
         }
 
